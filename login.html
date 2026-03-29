@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SportSpot – Login</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --dark:    #0b0f14;
+      --darker:  #070a0e;
+      --surface: #111620;
+      --card:    #161c2a;
+      --border:  #1f2a3c;
+      --green:   #00e676;
+      --teal:    #00bcd4;
+      --blue:    #1565c0;
+      --text:    #e0eaff;
+      --muted:   #637291;
+      --error:   #ef5350;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--dark); color: var(--text);
+      font-family: 'Nunito', sans-serif; min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    h1,h2,h3,h4,.brand-name { font-family: 'Rajdhani', sans-serif; }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: rgba(7,10,14,0.97) !important;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+    .brand-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .brand-name { font-size:1.5rem; font-weight:700; color:var(--text); letter-spacing:1px; }
+    .brand-name span { color:var(--green); }
+    .navbar-nav .nav-link { color:var(--muted) !important; font-weight:600; font-size:0.88rem; text-transform:uppercase; letter-spacing:0.5px; transition:color 0.25s; }
+    .navbar-nav .nav-link:hover { color:var(--green) !important; }
+    .btn-sport { background:linear-gradient(135deg,var(--green),var(--teal)); color:#000; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:0.95rem; letter-spacing:1px; border:none; border-radius:8px; padding:0.55rem 1.6rem; transition:transform 0.2s,box-shadow 0.2s; text-transform:uppercase; }
+    .btn-sport:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,230,118,0.3); color:#000; }
+    .navbar-toggler { border-color:var(--border); }
+    .navbar-toggler-icon { filter:invert(1); }
+
+    /* ── Page Layout ── */
+    /* CSS3 Flexbox */
+    .page-wrap {
+      flex:1; display:flex; align-items:center; justify-content:center;
+      padding: 3rem 1.5rem; position:relative; overflow:hidden;
+    }
+
+    /* CSS3 radial gradient glow */
+    .bg-glow-l {
+      position:absolute; left:-20%; top:50%; transform:translateY(-50%);
+      width:55vw; height:55vw;
+      background:radial-gradient(circle, rgba(0,230,118,0.06) 0%, transparent 65%);
+      pointer-events:none;
+    }
+    .bg-glow-r {
+      position:absolute; right:-20%; top:50%; transform:translateY(-50%);
+      width:45vw; height:45vw;
+      background:radial-gradient(circle, rgba(0,188,212,0.05) 0%, transparent 65%);
+      pointer-events:none;
+    }
+
+    /* ── Login Card ── */
+    /* CSS3 Grid */
+    .login-card {
+      display:grid; grid-template-columns:1fr 1fr;
+      max-width:920px; width:100%;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:20px; overflow:hidden;
+      position:relative; z-index:1;
+      /* CSS3 Animation */
+      animation: cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity:0; transform:scale(0.93) translateY(20px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    /* Left panel */
+    .login-left {
+      padding:3rem 2.5rem;
+      background:linear-gradient(160deg, #071428 0%, #031a10 100%);
+      position:relative; overflow:hidden;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    /* CSS3 grid overlay */
+    .login-left::before {
+      content:'';
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(0,230,118,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,230,118,0.05) 1px, transparent 1px);
+      background-size:35px 35px;
+    }
+    .left-z { position:relative; z-index:1; }
+
+    /* CSS3 float animation */
+    @keyframes floatY {
+      0%,100% { transform:translateY(0); }
+      50%      { transform:translateY(-12px); }
+    }
+    .shield-sm {
+      animation:floatY 4s ease-in-out infinite;
+      margin-bottom:1.5rem;
+    }
+    .left-title {
+      font-family:'Rajdhani',sans-serif; font-size:2.2rem;
+      font-weight:700; line-height:1.1; letter-spacing:1px;
+    }
+    .left-title .g { color:var(--green); }
+    .left-sub { font-size:0.84rem; color:var(--muted); line-height:1.65; margin-top:0.7rem; }
+
+    .demo-box {
+      background:rgba(0,230,118,0.07); border:1px solid rgba(0,230,118,0.18);
+      border-radius:10px; padding:1rem 1.2rem; margin-top:auto;
+    }
+    .demo-label { font-size:0.68rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:0.4rem; }
+    .demo-cred  { font-size:0.82rem; color:var(--green); font-weight:700; }
+
+    /* Right panel — form */
+    .login-right { padding:3rem 2.5rem; }
+    .form-tag { font-size:0.72rem; text-transform:uppercase; letter-spacing:2px; color:var(--green); font-weight:700; margin-bottom:0.5rem; }
+    .form-title { font-family:'Rajdhani',sans-serif; font-size:2rem; font-weight:700; letter-spacing:1px; margin-bottom:2rem; }
+
+    /* HTML5 <form> with custom styling */
+    .form-group { margin-bottom:1.4rem; }
+    label { display:block; font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.45rem; letter-spacing:0.5px; text-transform:uppercase; }
+
+    /* CSS3 Input focus transition */
+    input[type="text"],
+    input[type="password"] {
+      width:100%; padding:0.82rem 1rem;
+      background:var(--surface); border:1.5px solid var(--border);
+      border-radius:9px; color:var(--text);
+      font-family:'Nunito',sans-serif; font-size:0.95rem;
+      outline:none;
+      transition:border-color 0.25s, box-shadow 0.25s; /* CSS3 Transition */
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color:var(--green);
+      box-shadow:0 0 0 3px rgba(0,230,118,0.12);
+    }
+    input::placeholder { color:var(--muted); font-size:0.88rem; }
+
+    /* JS Validation error state */
+    input.is-invalid { border-color:var(--error) !important; }
+    input.is-invalid:focus { box-shadow:0 0 0 3px rgba(239,83,80,0.15) !important; }
+
+    .err-msg {
+      font-size:0.76rem; color:var(--error); margin-top:0.4rem;
+      display:none; /* JS toggles this */
+    }
+    .err-msg.show { display:block; }
+
+    /* Remember + Forgot row — CSS3 Flexbox */
+    .form-meta {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:1.8rem; font-size:0.83rem;
+    }
+    .remember { display:flex; align-items:center; gap:0.45rem; cursor:pointer; color:var(--muted); }
+    .remember input { accent-color:var(--green); width:15px; height:15px; }
+    .forgot { color:var(--green); text-decoration:none; font-weight:600; font-size:0.82rem; }
+    .forgot:hover { text-decoration:underline; }
+
+    /* Login button */
+    .btn-login {
+      width:100%; padding:0.92rem;
+      background:linear-gradient(135deg, var(--green), var(--teal));
+      color:#000; border:none; border-radius:9px;
+      font-family:'Rajdhani',sans-serif; font-size:1.05rem;
+      font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      cursor:pointer;
+      transition:opacity 0.2s, transform 0.2s; /* CSS3 */
+    }
+    .btn-login:hover { opacity:0.88; transform:translateY(-1px); }
+
+    /* Password strength bar (JS + CSS3) */
+    .strength-bar {
+      height:4px; border-radius:2px; background:var(--border);
+      margin-top:0.5rem; overflow:hidden;
+    }
+    .strength-fill {
+      height:100%; width:0%; border-radius:2px;
+      transition:width 0.3s, background 0.3s; /* CSS3 Transition */
+    }
+
+    .divider {
+      display:flex; align-items:center; gap:1rem;
+      color:var(--muted); font-size:0.78rem; margin:1.4rem 0;
+    }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    .reg-link { text-align:center; font-size:0.84rem; color:var(--muted); }
+    .reg-link a { color:var(--green); font-weight:700; text-decoration:none; }
+    .reg-link a:hover { text-decoration:underline; }
+
+    /* Success state */
+    .success-panel {
+      display:none; text-align:center; padding:1rem;
+      animation:cardIn 0.4s ease both;
+    }
+    .success-panel.show { display:block; }
+    .tick-circle {
+      width:80px; height:80px; border-radius:50%;
+      background:rgba(0,230,118,0.1); border:2px solid rgba(0,230,118,0.3);
+      display:flex; align-items:center; justify-content:center;
+      font-size:2.2rem; margin:0 auto 1.2rem;
+      /* CSS3 animation */
+      animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn {
+      from { transform:scale(0); opacity:0; }
+      to   { transform:scale(1); opacity:1; }
+    }
+    .success-title { font-family:'Rajdhani',sans-serif; font-size:2rem; color:var(--green); font-weight:700; letter-spacing:1px; }
+    .success-sub { color:var(--muted); font-size:0.88rem; margin-top:0.4rem; }
+    .btn-goto { display:inline-block; margin-top:1.5rem; padding:0.8rem 2rem; background:linear-gradient(135deg,var(--green),var(--teal)); color:#000; text-decoration:none; border-radius:9px; font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:1px; font-size:1.05rem; transition:transform 0.2s; }
+    .btn-goto:hover { transform:translateY(-2px); color:#000; }
+
+    footer { border-top:1px solid var(--border); padding:1.5rem 0; background:var(--darker); }
+    .footer-brand { font-family:'Rajdhani',sans-serif; font-size:1.2rem; font-weight:700; color:var(--muted); }
+    .footer-brand span { color:var(--green); }
+    footer p { font-size:0.78rem; color:var(--muted); margin:0; }
+
+    @media(max-width:720px) {
+      .login-card { grid-template-columns:1fr; }
+      .login-left { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Bootstrap Navbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="brand-logo" href="index.html">
+      <svg width="38" height="42" viewBox="0 0 42 46" fill="none">
+        <path d="M21 1L39 8V22C39 32 31 40.5 21 44C11 40.5 3 32 3 22V8L21 1Z" fill="url(#ns1)" stroke="url(#ns2)" stroke-width="1.5"/>
+        <circle cx="14" cy="21" r="4.5" fill="#fff" opacity="0.88"/>
+        <ellipse cx="28" cy="17" rx="3.5" ry="5.5" fill="#FFD54F" transform="rotate(-18 28 17)"/>
+        <circle cx="27" cy="28" r="3.8" fill="#4FC3F7" opacity="0.85"/>
+        <polygon points="21,7 23,13 29,13 24.5,16.5 26,22 21,19 16,22 17.5,16.5 13,13 19,13" fill="#FFD54F" opacity="0.9"/>
+        <defs>
+          <linearGradient id="ns1" x1="3" y1="1" x2="39" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#1565C0"/><stop offset="100%" stop-color="#00695C"/>
+          </linearGradient>
+          <linearGradient id="ns2" x1="3" y1="1" x2="39" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#42A5F5"/><stop offset="100%" stop-color="#00E676"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="brand-name">Sport<span>Spot</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav2">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav2">
+      <ul class="navbar-nav ms-auto align-items-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Book Slot</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item ms-2"><a href="login.html" class="btn btn-sport btn-sm">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="bg-glow-l"></div>
+  <div class="bg-glow-r"></div>
+
+  <div class="login-card">
+    <!-- Left panel -->
+    <div class="login-left">
+      <div class="left-z">
+        <div class="shield-sm">
+          <svg width="64" height="72" viewBox="0 0 42 46" fill="none">
+            <path d="M21 1L39 8V22C39 32 31 40.5 21 44C11 40.5 3 32 3 22V8L21 1Z" fill="url(#ls1)" stroke="url(#ls2)" stroke-width="1"/>
+            <circle cx="14" cy="21" r="4.5" fill="#fff" opacity="0.88"/>
+            <ellipse cx="28" cy="17" rx="3.5" ry="5.5" fill="#FFD54F" transform="rotate(-18 28 17)"/>
+            <circle cx="27" cy="28" r="3.8" fill="#4FC3F7" opacity="0.85"/>
+            <polygon points="21,7 23,13 29,13 24.5,16.5 26,22 21,19 16,22 17.5,16.5 13,13 19,13" fill="#FFD54F" opacity="0.9"/>
+            <defs>
+              <linearGradient id="ls1" x1="3" y1="1" x2="39" y2="44" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1565C0"/><stop offset="100%" stop-color="#00695C"/>
+              </linearGradient>
+              <linearGradient id="ls2" x1="3" y1="1" x2="39" y2="44" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#42A5F5"/><stop offset="100%" stop-color="#00E676"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="left-title">PLAY MORE.<br/>WAIT <span class="g">LESS.</span></div>
+        <p class="left-sub">Log in to access your bookings, browse available slots, and reserve your game time in seconds.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;">
+          <span style="font-size:1.8rem;">🏏</span>
+          <span style="font-size:1.8rem;">🏓</span>
+          <span style="font-size:1.8rem;">🏐</span>
+          <span style="font-size:1.8rem;">🎱</span>
+          <span style="font-size:1.8rem;">🎾</span>
+        </div>
+      </div>
+      <div class="demo-box left-z">
+        <div class="demo-label">Demo Credentials</div>
+        <div class="demo-cred">Username: player1 &nbsp;|&nbsp; Password: 1234</div>
+      </div>
+    </div>
+
+    <!-- Right panel — HTML5 form -->
+    <div class="login-right">
+      <!-- HTML5 <form> tag with novalidate (JS handles validation) -->
+      <form id="loginForm" novalidate autocomplete="off">
+        <div class="form-tag">Welcome Back</div>
+        <div class="form-title">LOGIN TO BOOK</div>
+
+        <!-- HTML5 input with type, placeholder, required attributes -->
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username"
+                 placeholder="Enter your username"
+                 required autocomplete="off"/>
+          <div class="err-msg" id="err-username">⚠ Please enter your username.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password"
+                 placeholder="Enter your password"
+                 required minlength="4"/>
+          <!-- CSS3 strength bar (JS controlled) -->
+          <div class="strength-bar">
+            <div class="strength-fill" id="strengthFill"></div>
+          </div>
+          <div class="err-msg" id="err-password">⚠ Password must be at least 4 characters.</div>
+          <div class="err-msg" id="err-creds">⚠ Incorrect username or password.</div>
+        </div>
+
+        <div class="form-meta">
+          <!-- HTML5 checkbox input -->
+          <label class="remember">
+            <input type="checkbox" id="rememberMe"/> Remember me
+          </label>
+          <a href="#" class="forgot">Forgot password?</a>
+        </div>
+
+        <!-- HTML5 button type="submit" -->
+        <button type="submit" class="btn-login" id="loginBtn">Login →</button>
+
+        <div class="divider">or</div>
+        <div class="reg-link">Don't have an account? <a href="#">Register here</a></div>
+      </form>
+
+      <!-- Success Panel (shown by JS) -->
+      <div class="success-panel" id="successPanel">
+        <div class="tick-circle">✅</div>
+        <div class="success-title">LOGIN SUCCESSFUL!</div>
+        <p class="success-sub">Welcome back, <strong id="welcomeName"></strong>! Ready to play?</p>
+        <a href="booking.html" class="btn-goto">Go to Booking →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div class="footer-brand">Sport<span>Spot</span></div>
+    <p>BWD Project · CVM University · 2025</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript: DOM, Events, Validation (Syllabus Topic 5) -->
+<script>
+  // Valid users (simulated database)
+  const validUsers = { "player1":"1234", "admin":"admin123", "demo":"demo" };
+
+  // ── DOM Element References ──
+  const form        = document.getElementById('loginForm');
+  const usernameEl  = document.getElementById('username');
+  const passwordEl  = document.getElementById('password');
+  const strengthEl  = document.getElementById('strengthFill');
+  const successPanel= document.getElementById('successPanel');
+  const welcomeName = document.getElementById('welcomeName');
+
+  // ── JS Event: password input → real-time strength meter ──
+  // (demonstrates: addEventListener, DOM manipulation, conditions)
+  passwordEl.addEventListener('input', function() {
+    const val = this.value;
+    let strength = 0;
+    if (val.length >= 4) strength = 33;
+    if (val.length >= 7) strength = 66;
+    if (val.length >= 10 && /[^a-zA-Z0-9]/.test(val)) strength = 100;
+    // CSS3 transition handles smooth bar change
+    strengthEl.style.width = strength + '%';
+    strengthEl.style.background =
+      strength < 40 ? '#ef5350' :
+      strength < 75 ? '#ffb300' : '#00e676';
+  });
+
+  // ── JS: Clear errors on typing ──
+  usernameEl.addEventListener('input', function() {
+    this.classList.remove('is-invalid');
+    hideErr('err-username');
+    hideErr('err-creds');
+  });
+  passwordEl.addEventListener('input', function() {
+    this.classList.remove('is-invalid');
+    hideErr('err-password');
+    hideErr('err-creds');
+  });
+
+  // ── JS: Form submit event (validation) ──
+  form.addEventListener('submit', function(e) {
+    e.preventDefault(); // prevent default HTML5 submission
+    let valid = true;
+
+    // Clear all errors first
+    document.querySelectorAll('.err-msg').forEach(el => el.classList.remove('show'));
+    document.querySelectorAll('input').forEach(el => el.classList.remove('is-invalid'));
+
+    const uname = usernameEl.value.trim();
+    const pwd   = passwordEl.value.trim();
+
+    // Validation 1: empty username
+    if (!uname) {
+      showErr('err-username');
+      usernameEl.classList.add('is-invalid');
+      usernameEl.focus();
+      valid = false;
+    }
+
+    // Validation 2: password length
+    if (pwd.length < 4) {
+      showErr('err-password');
+      passwordEl.classList.add('is-invalid');
+      if (valid) passwordEl.focus();
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Validation 3: check credentials
+    if (validUsers[uname] && validUsers[uname] === pwd) {
+      // ── JS: DOM manipulation — hide form, show success ──
+      form.style.display = 'none';
+      welcomeName.textContent = uname;
+      successPanel.classList.add('show');
+    } else {
+      showErr('err-creds');
+      usernameEl.classList.add('is-invalid');
+      passwordEl.classList.add('is-invalid');
+    }
+  });
+
+  // ── JS: Keyboard Event — Enter key ──
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
+      form.dispatchEvent(new Event('submit'));
+    }
+  });
+
+  function showErr(id) { document.getElementById(id).classList.add('show'); }
+  function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+</script>
+</body>
+</html>
